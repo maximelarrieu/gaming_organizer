@@ -18,3 +18,17 @@ exports.findAll = (req, res) => {
             });
         });
 };
+
+exports.findOne = (req, res) => {
+    const id = req.params.id
+
+    Game.findByPk(id)
+        .then(data => {
+            res.send(data)
+        })
+        .catch(error => {
+            res.status(500).send({
+                message: "Le jeu est introuvable : " + error
+            })
+        })
+}

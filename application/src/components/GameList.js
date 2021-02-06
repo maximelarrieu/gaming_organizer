@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 
-// import "../styles/GameList.css"
+import "../styles/All.css"
+import "../styles/GameList.css"
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { GridList, GridListTile, GridListTileBar } from "@material-ui/core"
 
@@ -55,22 +56,25 @@ class GameList extends Component {
         const {games} = this.state;
         console.log(games)
             return (
-            <>
-                <h3 className="my-4">LISTE DES JEUX</h3>
+            <div className="margin">
+                <h3>LISTE DES JEUX</h3>
                 <GridList cellHeight={260} cols={this.getGridListCols()} spacing={15}>
                     {
                         games.map((game) =>
-                                <GridListTile key={game.id} cols={game.cols || 1}>
-                                    <img src={game.image} alt={game.title} />
+                            <GridListTile key={game.id} cols={game.cols || 1}>
+                                <Link to={`games/${game.id}`}>
+                                <img src={game.image} alt={game.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
                                     <GridListTileBar
                                         title={game.title}
                                         subtitle={game.description}
                                     />
-                                </GridListTile>
+                                </Link>                                  
+                            </GridListTile>  
+                        
                         )
                     }
                 </GridList>
-            </>
+            </div>
         )
     }
 }

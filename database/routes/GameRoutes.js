@@ -12,5 +12,7 @@ module.exports = app => {
 
     router.get("/games", cors(corsOptions), games.findAll);
 
+    router.get("/games/:id", cors(corsOptions), games.findOne)
+
     app.use('/api', router)
 }

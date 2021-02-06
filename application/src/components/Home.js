@@ -1,8 +1,12 @@
 import React from 'react'
 
+import '../styles/All.css'
+
 const Home = () => {
     return (
-        <h1>HOMEPAGE</h1>
+        <div className="margin">
+            <h1>HOMEPAGE</h1>
+        </div>
     )
 }
 

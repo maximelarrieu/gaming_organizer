@@ -4,8 +4,7 @@
     "password": "root",
     "database": "gaming_organizer",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "proxy": "http://localhost:3000"
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",

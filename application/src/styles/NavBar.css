@@ -5,6 +5,10 @@ a {
   font-size: 1.5em;
 }
 
+a:hover {
+  color: #50b15f;
+}
+
 img {
   width: 3em;
 }

@@ -3,8 +3,10 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 
 import "../styles/All.css"
+import "../styles/EventList.css"
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import { GridList, GridListTile, GridListTileBar } from "@material-ui/core"
+import { GridList, GridListTile, GridListTileBar, IconButton } from "@material-ui/core"
+import PersonIcon from '@material-ui/icons/Person';
 
 import EventService from '../services/EventService'
 
@@ -62,10 +64,15 @@ class EventList extends Component {
                         events.map((event) =>
                             <GridListTile key={event.id} cols={event.cols || 1}>
                                 <Link to={`events/${event.id}`}>
-                                <img src={event.image} alt={event.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
+                                <img src={event.Game.image} alt={event.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
                                     <GridListTileBar
                                         title={event.title}
-                                        subtitle={event.game_id}
+                                        subtitle={event.description}
+                                        actionIcon={
+                                            <IconButton className="icon">
+                                                <PersonIcon className="players"/> 0 / {event.players}
+                                            </IconButton>
+                                        }
                                     />
                                 </Link>
                             </GridListTile>

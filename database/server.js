@@ -27,6 +27,7 @@ app.use((req, res, next) => {
 });
 
 require("./routes/GameRoutes")(app);
+require("./routes/EventRoutes")(app);
 
 app.use(cors());
 app.options('*', cors());

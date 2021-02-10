@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const Game = require('./game')
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     /**
@@ -17,15 +18,20 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
     startedAt: DataTypes.DATE,
-    players: DataTypes.INTEGER
+    players: DataTypes.INTEGER,
+    game_id : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Game,
+        key: 'game_id'
+      }
+    }
   }, {
     sequelize,
     modelName: 'Event',
   });
 
-  Event.associate = function(models) {
-    Event.belongsTo(models.Game, {foreignKey: 'game_id'})
-  }
 
   return Event;
 };

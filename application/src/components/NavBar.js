@@ -15,6 +15,9 @@ const NavBar = () => (
             <Button>
                 <a href="/games" className='others-button'>MES JEUX</a>
             </Button>
+            <Button>
+                <a href="/events" className='others-button'>EVENEMENTS</a>
+            </Button>
         </Toolbar>
     </AppBar>
 )

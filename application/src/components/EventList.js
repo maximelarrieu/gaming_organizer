@@ -64,7 +64,7 @@ class EventList extends Component {
                         events.map((event) =>
                             <GridListTile key={event.id} cols={event.cols || 1}>
                                 <Link to={`events/${event.id}`}>
-                                <img src={event.Game.image} alt={event.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
+                                <img src={event.Game.image } alt={event.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
                                     <GridListTileBar
                                         title={event.title}
                                         subtitle={event.description}

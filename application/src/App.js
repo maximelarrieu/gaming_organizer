@@ -7,14 +7,14 @@ import GameList from './components/GameList';
 import GameDetails from './components/GameDetails';
 import EventList from './components/EventList';
 import NavBar from './components/NavBar';
-import EventCreate from './components/EventCreate';
+import EventDetails from './components/EventDetails';
 
 function App() {
   return (
     <Router>
       <NavBar />
       <Switch>
-        <Route path="/events/:game_id/create" component={EventCreate} />
+        <Route path="/events/:id" component={EventDetails} />
         <Route path="/events" component={EventList} />
         <Route path="/games/:id" component={GameDetails} />
         <Route path="/games" component={GameList} />

@@ -5,13 +5,13 @@ class EventService {
         return http.get('/events')
     }
 
+    findOne(id) {
+        return http.get(`/events/${id}`)
+    }
+
     create(data) {
         return http.post("/events", data)
     }
-
-    // findAllByGames() {
-    //     return http.get('/games/:id')
-    // }
 }
 
 export default new EventService();

@@ -69,7 +69,7 @@ export default class GameDetails extends Component {
     render() {
         const {game} = this.state
         // const {events} = this.state
-        // console.log(events)
+        // console.log(game.Event)
         return (
             <>
                 <div className="margin">

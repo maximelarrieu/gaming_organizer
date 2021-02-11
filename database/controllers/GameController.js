@@ -1,5 +1,6 @@
 const db = require("../models");
 const Game = db.Game;
+const Event = db.Event;
 const Op = db.Sequelize.Op;
 const auth = require('../auth/auth_middleware')
 
@@ -32,3 +33,5 @@ exports.findOne = (req, res) => {
             })
         })
 }
+
+// Game.hasMany(Event, { as: "event_id"})

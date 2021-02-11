@@ -15,7 +15,9 @@ module.exports = app => {
 
     router.get("/events", cors(corsOptions), events.findAll);
 
-    router.post("/events/:game_id/create", cors(corsOptions), events.create)
+    router.get("/events/:id", cors(corsOptions), events.findOne);
+
+    // router.post("/events/:game_id/create", cors(corsOptions), events.create)
 
     app.use('/api', router)
 }

@@ -40,8 +40,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 require("./routes/GameRoutes")(app);
 require("./routes/EventRoutes")(app);
 
-
 app.listen(port, () => console.log(`Port sur écoute : ${port}`));
 const db = require('./models');
+// db.Game.hasMany(db.Event, {foreignKey: 'game_id'})
+db.Event.belongsTo(db.Game, {foreignKey: 'game_id'})
 db.sequelize.sync();
 

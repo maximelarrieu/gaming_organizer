@@ -81,6 +81,7 @@ export default class EventCreate extends Component {
                     submitted: true
                 })
                 console.log(response.data)
+                this.props.history.push('/events')
             })
             .catch(err => {
                 console.log(err)

@@ -23,10 +23,10 @@ h2 {
 }
 
 .MuiButton-root {
-  background-color: #50b15f;
+  background-color: blue;
 }
 
 .MuiButton-root:hover {
-  background-color: blue;
-  color: #50b15f;
+  background-image: blue;
+  color: #b15050;
 }

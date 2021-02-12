@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Event.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      unique: true
+        // true
+        // msg: "Un évènement portant se nom existe déjà."
+      // }
+    },
     description: DataTypes.TEXT,
     startedAt: DataTypes.DATE,
     players: DataTypes.INTEGER,

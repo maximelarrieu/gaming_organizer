@@ -1,46 +1,66 @@
-import { TextField } from '@material-ui/core';
 import React, { Component } from 'react'
+import DateTimePicker from 'react-datetime'
+import {Link} from 'react-router-dom'
 
 import '../styles/All.css'
 import '../styles/EventCreate.css'
+// import "react-datetime/css/react-datetime.css";
+import AddIcon from '@material-ui/icons/Add';
+import { Button, TextField } from '@material-ui/core';
 
-import Game from '../services/GameService'
 import EventService from '../services/EventService'
-import GameService from '../services/GameService'
 
 export default class EventCreate extends Component {
     constructor(props) {
         super(props);
-        this.saveEvent = this.saveEvent.bind(this);
-        this.createEvent = this.createEvent.bind(this);
-
         this.state = {
             id: null,
             title: '',
             description: '',
             players: 1,
-            startedAt: new Date(),
-            game_id: Game.id,
+            startedAt: '',
+            game_id: 1,
             //started: false
             submitted: false
-        }
+        };
+        this.onChangeTitle = this.onChangeTitle.bind(this);
+        this.onChangeDescription = this.onChangeDescription.bind(this);
+        this.onChangePlayers = this.onChangePlayers.bind(this);
+        this.onChangeStartedAt = this.onChangeStartedAt.bind(this);
+        this.onChangeGameId = this.onChangeGameId.bind(this);
+        this.saveEvent = this.saveEvent.bind(this);
     }
 
     onChangeTitle(data) {
-        const title = data.target.value
-
-        this.setState((prevState => {
-            return {
-                game: {
-                    ...prevState.game,
-                    title: title
-                }
-            }
-        }))
+        this.setState({
+            title: data.target.value
+        })
+    }
+    onChangeDescription(data) {
+        this.setState({
+            description: data.target.value
+        })
+    }
+    onChangePlayers(data) {
+        this.setState({
+            players: data.target.value
+        })
+    }
+    onChangeStartedAt(data) {
+        this.setState({
+            startedAt: data
+        })
+    }
+    onChangeGameId(data) {
+        this.setState({
+            game_id: data.target.value
+        })
     }
 
-    saveEvent() {
-        let data = {
+    saveEvent(e) {
+        e.preventDefault()
+
+        let event = {
             title: this.state.title,
             description: this.state.description,
             players: this.state.players,
@@ -48,7 +68,7 @@ export default class EventCreate extends Component {
             game_id: this.state.game_id
         };
 
-        EventService.create(data)
+        EventService.create(event)
             .then(response => {
                 this.setState({
                     id: response.data.id,
@@ -60,22 +80,11 @@ export default class EventCreate extends Component {
                     //started: ?
                     submitted: true
                 })
+                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
             })
-    }
-
-    createEvent() {
-        this.setState({
-            id: null,
-            title: "",
-            description: "",
-            players: 0,
-            startedAt: new Date(),
-            game_id: Game.id,
-            submitted: false
-        })
     }
 
     render() {
@@ -85,7 +94,18 @@ export default class EventCreate extends Component {
             <div className="margin">
                 <h2>Création de l'évènement - Nom du jeu récupéré</h2>
                 <form>
-                    <TextField InputProps={{style:{color: "green"}}} required id="standard-required" label="Titre de l'évènement" />
+                    <div>
+                        <TextField required id="standard-required" variant="outlined" label="Titre de l'évènement" value={this.state.title} onChange={this.onChangeTitle} name="title" />
+                    </div>
+                    <TextField required id="filled-multiline-flexible" variant="outlined" label="Description" value={this.state.description} onChange={this.onChangeDescription} name="description" />
+                    <TextField required id="standard-required" variant="outlined" type="number" label="Nombre de participant" value={this.state.players} onChange={this.onChangePlayers} name="players" />
+                    <DateTimePicker dateFormat="DD-MM-YYYY" timeFormat="HH:mm" label="Début" value={this.state.startedAt} onChange={this.onChangeStartedAt} name="startedAt" />
+                    <TextField required id="standard-required" variant="outlined" type="number" label="Jeu" value={this.state.game_id} onChange={this.onChangeGameId} name="players" />
+                    <Link to={'/events'}>
+                        <Button variant="contained" type="submit" onClick={this.saveEvent}>
+                            <AddIcon /> Valider
+                        </Button>
+                    </Link>
                 </form>
             </div>
         )

@@ -10,7 +10,7 @@ class EventService {
     }
 
     create(data) {
-        return http.post("/events", data)
+        return http.post(`/events/create`, data)
     }
 }
 

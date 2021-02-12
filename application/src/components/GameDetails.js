@@ -7,13 +7,11 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
 import GameService from '../services/GameService'
-// import EventService from '../services/EventService'
 
 export default class GameDetails extends Component {
     constructor(props) {
         super(props);
         this.getGame = this.findOne.bind(this);
-        // this.getEvents = this.findAllEvents.bind(this);
         
         this.state = {
             game: {
@@ -53,23 +51,9 @@ export default class GameDetails extends Component {
                 console.log("Jeu introuvable : " + error)
             })
     }
-
-    // findAllEvents() {
-    //     EventService.findAllByGames()
-    //         .then(response => {
-    //             this.setState({
-    //                 events: response.data
-    //             })
-    //         })
-    //         .catch(err => {
-    //             console.log(err)
-    //         })
-    // }
     
     render() {
         const {game} = this.state
-        // const {events} = this.state
-        // console.log(game.Event)
         return (
             <>
                 <div className="margin">
@@ -79,18 +63,12 @@ export default class GameDetails extends Component {
                             <h5><Moment format="DD-MM-YYYY">{game.releasedAt}</Moment></h5>
                             <p>{game.description}</p>
                         </div>
-                        <Link to={`/events/${game.id}/create`}>
+                        <Link to={`/events/create`}>
                             <Button variant='contained'>
                                 <AddIcon /> Créer une évènement
                             </Button>
                         </Link>
                     </div>
-
-                    {/* {
-                        events.map((event) => {
-                            <p>{event.title}</p>
-                        })
-                    } */}
                 </div>
             </>
         )

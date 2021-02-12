@@ -4,6 +4,28 @@ const Game = db.Game;
 const Op = db.Sequelize.Op;
 const auth = require('../auth/auth_middleware')
 
+exports.create = (req, res) => {
+
+    const event = {
+        title: req.body.title,
+        description: req.body.description,
+        players: req.body.players,
+        startedAt: req.body.startedAt,
+        game_id: req.body.game_id
+    }
+
+    Event.create(event)
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            res.status(500).send({
+                message:
+                    error.message
+            })
+        })
+}
+
 exports.findAll = (req, res) => {
 
     Event.findAll({

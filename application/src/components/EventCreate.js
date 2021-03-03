@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import DateTimePicker from 'react-datetime'
 import {Link} from 'react-router-dom'
@@ -9,17 +10,25 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button, TextField } from '@material-ui/core';
 
 import EventService from '../services/EventService'
+import GameService from "../services/GameService";
 
 export default class EventCreate extends Component {
+
+    _isMounted = false;
+
     constructor(props) {
         super(props);
+        this.getGame = this.findOne.bind(this);
         this.state = {
             id: null,
             title: '',
             description: '',
             players: 1,
             startedAt: '',
+            game: {},
             game_id: 1,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
             //started: false
             submitted: false
         };
@@ -27,8 +36,13 @@ export default class EventCreate extends Component {
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangePlayers = this.onChangePlayers.bind(this);
         this.onChangeStartedAt = this.onChangeStartedAt.bind(this);
-        this.onChangeGameId = this.onChangeGameId.bind(this);
+        // this.onChangeGameId = this.onChangeGameId.bind(this);
         this.saveEvent = this.saveEvent.bind(this);
+    }
+
+    componentDidMount() {
+        this._isMounted = true
+        this.getGame(this.props.match.params.id)
     }
 
     onChangeTitle(data) {
@@ -51,24 +65,44 @@ export default class EventCreate extends Component {
             startedAt: data
         })
     }
-    onChangeGameId(data) {
-        this.setState({
-            game_id: data.target.value
-        })
+    // onChangeGameId(data) {
+    //     this.setState({
+    //         game_id: this.state.game_id
+    //     })
+    // }
+
+    findOne(id) {
+        GameService.findOne(id)
+            .then(response => {
+                if (this._isMounted) {
+                    this.setState({
+                        game: response.data
+                    })
+                }
+            })
+            .catch(error => {
+                console.log("Jeu introuvable : " + error)
+            })
     }
 
-    saveEvent(e) {
-        e.preventDefault()
+    componentWillUnmount() {
+        this._isMounted = false
+    }
 
-        let event = {
+    saveEvent() {
+        // e.preventDefault()
+
+        let data = {
             title: this.state.title,
             description: this.state.description,
             players: this.state.players,
             startedAt: this.state.startedAt,
-            game_id: this.state.game_id
+            game_id: this.state.game.id,
+            // createdAt: Date.now(),
+            // updatedAt: Date.now()
         };
 
-        EventService.create(event)
+        EventService.create(data)
             .then(response => {
                 this.setState({
                     id: response.data.id,
@@ -76,12 +110,14 @@ export default class EventCreate extends Component {
                     description: response.data.description,
                     players: response.data.players,
                     startedAt: response.data.startedAt,
-                    game_id: response.data.game_id,
+                    game_id: this.state.game.id,
+                    // createdAt: Date.now(),
+                    // updatedAt: Date.now(),
                     //started: ?
                     submitted: true
                 })
                 console.log(response.data)
-                this.props.history.push('/events')
+                this.props.history.push(`/events/${response.data.id}`)
             })
             .catch(err => {
                 console.log(err)
@@ -89,8 +125,8 @@ export default class EventCreate extends Component {
     }
 
     render() {
-        // const {game} = this.state
-        // console.log(game)
+        const {game} = this.state
+        console.log(game)
         return (
             <div className="margin">
                 <h2>Création de l'évènement - Nom du jeu récupéré</h2>
@@ -101,7 +137,7 @@ export default class EventCreate extends Component {
                     <TextField required id="filled-multiline-flexible" variant="outlined" label="Description" value={this.state.description} onChange={this.onChangeDescription} name="description" />
                     <TextField required id="standard-required" variant="outlined" type="number" label="Nombre de participant" value={this.state.players} onChange={this.onChangePlayers} name="players" />
                     <DateTimePicker dateFormat="DD-MM-YYYY" timeFormat="HH:mm" label="Début" value={this.state.startedAt} onChange={this.onChangeStartedAt} name="startedAt" />
-                    <TextField required id="standard-required" variant="outlined" type="number" label="Jeu" value={this.state.game_id} onChange={this.onChangeGameId} name="players" />
+                    {/*<TextField required id="standard-required" variant="outlined" type="number" label="Jeu" value={this.state.game_id} onChange={this.onChangeGameId} name="players" />*/}
                     <Link to={'/events'}>
                         <Button variant="contained" type="submit" onClick={this.saveEvent}>
                             <AddIcon /> Valider

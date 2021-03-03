@@ -63,7 +63,7 @@ export default class GameDetails extends Component {
                             <h5><Moment format="DD-MM-YYYY">{game.releasedAt}</Moment></h5>
                             <p>{game.description}</p>
                         </div>
-                        <Link to={`/events/create`}>
+                        <Link to={`/events/${game.id}/create`}>
                             <Button variant='contained'>
                                 <AddIcon /> Créer une évènement
                             </Button>

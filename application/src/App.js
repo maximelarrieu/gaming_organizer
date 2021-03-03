@@ -19,7 +19,7 @@ function App() {
         <Route exact path="/games" component={GameList} />
         <Route exact path="/games/:id" component={GameDetails} />
         <Route exact path="/events" component={EventList} />
-        <Route exact path="/events/create" component={EventCreate} />
+        <Route exact path="/events/:id/create" component={EventCreate} />
         <Route exact path="/events/:id" component={EventDetails} />
       </Switch>
     </Router>

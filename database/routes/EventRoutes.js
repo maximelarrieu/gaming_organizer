@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const Game = require('../models/game')
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -20,11 +20,9 @@ module.exports = app => {
 
     let router = require('express').Router();
 
+    router.post("/events/:id/create", cors(corsOptions), jsonParser, urlencodedParser, events.create)
     router.get("/events", cors(corsOptions), events.findAll);
-
     router.get("/events/:id", cors(corsOptions), events.findOne);
-
-    router.post("/events/create", cors(corsOptions), jsonParser, events.create)
 
     app.use('/api', router)
 }

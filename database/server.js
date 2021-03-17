@@ -39,10 +39,36 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 require("./routes/GameRoutes")(app);
 require("./routes/EventRoutes")(app);
+require('./routes/SecurityRoutes')(app);
 
 app.listen(port, () => console.log(`Port sur écoute : ${port}`));
 const db = require('./models');
 // db.Game.hasMany(db.Event, {foreignKey: 'game_id'})
+db.Game.hasMany(db.Event, {foreignKey: 'game_id'})
+db.Role.belongsToMany(db.User, {through: "user_roles", foreignKey: "roleId", otherKey: "userId"})
+db.User.belongsToMany(db.Role, {through: "user_roles", foreignKey: "userId", otherKey: "roleId"})
 db.Event.belongsTo(db.Game, {foreignKey: 'game_id'})
-db.sequelize.sync();
+
+db.ROLES = ["user", "admin", "moderator"]
+
+const Role = db.Role
+
+function initial() {
+    Role.create({
+        id: 1,
+        name: db.ROLES[0]
+    });
+    Role.create({
+        id: 2,
+        name: db.ROLES[1]
+    });
+    Role.create({
+        id: 3,
+        name: db.ROLES[2]
+    });
+}
+
+db.sequelize.sync().then(() => {
+    initial()
+});
 

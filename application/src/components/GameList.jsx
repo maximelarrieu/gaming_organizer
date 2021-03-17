@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import "../styles/All.css"
 import "../styles/GameList.css"
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import { GridList, GridListTile, GridListTileBar } from "@material-ui/core"
+import {Box, GridList, GridListTile, GridListTileBar, Typography} from "@material-ui/core"
 
 import GameService from '../services/GameService'
 
@@ -15,7 +15,7 @@ class GameList extends Component {
         
 
         this.state = {
-            games: []
+            games: [],
         };
     }
 
@@ -34,6 +34,7 @@ class GameList extends Component {
 
         return 1;
     }
+
 
     componentDidMount() {
         this.findAll();
@@ -56,8 +57,8 @@ class GameList extends Component {
         const {games} = this.state;
         console.log(games)
             return (
-            <div className="margin">
-                <h3>LISTE DES JEUX</h3>
+            <Box className="margin">
+                <Typography variant="h4">LISTE DES JEUX</Typography>
                 <GridList cellHeight={260} cols={this.getGridListCols()} spacing={15}>
                     {
                         games.map((game) =>
@@ -74,7 +75,7 @@ class GameList extends Component {
                         )
                     }
                 </GridList>
-            </div>
+            </Box>
         )
     }
 }

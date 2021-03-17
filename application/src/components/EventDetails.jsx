@@ -45,6 +45,7 @@ export default class EventDetails extends Component {
                     <Grid item xl={4} lg={4} md={6}>
                         <h2>{event.title}</h2>
                         <p>{game.title}</p>
+                        <p>{event.startedAt}</p>
                         <i>{event.description}</i>
                     </Grid>
                 </Grid>

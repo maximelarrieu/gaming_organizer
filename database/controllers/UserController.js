@@ -3,7 +3,7 @@ const User = db.User;
 const Op = db.Sequelize.Op;
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const privateKey = require('../auth/private_key')
+const privateKey = require('../auth')
 
 exports.findOne = (req, res) => {
     const username = req.query.username;
@@ -40,6 +40,18 @@ exports.findOne = (req, res) => {
     });
 }
 
-exports.test = (req, res) => {
+exports.allAccess = (req, res) => {
+    res.status(200).send("Public Content.");
+};
 
-}
+exports.userBoard = (req, res) => {
+    res.status(200).send("User Content.");
+};
+
+exports.adminBoard = (req, res) => {
+    res.status(200).send("Admin Content.");
+};
+
+exports.moderatorBoard = (req, res) => {
+    res.status(200).send("Moderator Content.");
+};

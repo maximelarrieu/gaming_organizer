@@ -1,4 +1,4 @@
-const auth = require('../auth/auth_middleware')
+const auth = require('../auth/authJwt')
 const cors = require('cors')
 
 const corsOptions = {

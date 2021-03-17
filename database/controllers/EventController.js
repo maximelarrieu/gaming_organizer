@@ -2,7 +2,7 @@ const db = require("../models");
 const Event = db.Event;
 const Game = db.Game;
 const Op = db.Sequelize.Op;
-const auth = require('../auth/auth_middleware')
+const auth = require('../auth/authJwt')
 
 exports.toCreate = (req, res) => {
     const id = req.params.id

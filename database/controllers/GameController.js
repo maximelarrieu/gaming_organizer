@@ -2,7 +2,7 @@ const db = require("../models");
 const Game = db.Game;
 const Event = db.Event;
 const Op = db.Sequelize.Op;
-const auth = require('../auth/auth_middleware')
+const auth = require('../auth/authJwt')
 
 exports.findAll = (req, res) => {
     const title = req.query.title;
@@ -23,8 +23,14 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id
 
-    Game.findByPk(id)
-        .then(data => {
+    Game.findByPk(id, {
+        include: [
+            {
+                model: Event
+            }
+        ]
+    })
+        .then((data) => {
             res.send(data)
         })
         .catch(error => {

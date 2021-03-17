@@ -22,11 +22,7 @@ h2 {
   text-transform: uppercase;
 }
 
-.MuiButton-root {
-  background-color: blue;
+.MuiButton-label:hover {
+  color: #50b15f;
 }
 
-.MuiButton-root:hover {
-  background-image: blue;
-  color: #b15050;
-}

@@ -1,14 +1,17 @@
 import './App.css';
 
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import "react-datetime/css/react-datetime.css";
 
-import NavBar from './components/NavBar';
-import Home from './components/Home';
-import GameList from './components/GameList';
-import GameDetails from './components/GameDetails';
-import EventList from './components/EventList';
-import EventDetails from './components/EventDetails';
-import EventCreate from './components/EventCreate';
+import NavBar from './components/NavBar.jsx';
+import Home from './components/Home.jsx';
+import GameList from './components/GameList.jsx';
+import GameDetails from './components/GameDetails.jsx';
+import EventList from './components/EventList.jsx';
+import EventDetails from './components/EventDetails.jsx';
+import EventCreate from './components/EventCreate.jsx';
+import Register from './components/Register.jsx';
+import Login from './components/Login.jsx';
 
 function App() {
   return (
@@ -21,6 +24,8 @@ function App() {
         <Route exact path="/events" component={EventList} />
         <Route exact path="/events/:id/create" component={EventCreate} />
         <Route exact path="/events/:id" component={EventDetails} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/login" component={Login} />
       </Switch>
     </Router>
   );

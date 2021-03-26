@@ -1,6 +1,7 @@
 const auth = require('../auth/authJwt')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const Game = require('../models/game')
 

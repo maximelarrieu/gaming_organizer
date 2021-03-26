@@ -79,7 +79,7 @@ class GameDetails extends Component {
         const testcss = this.state
         console.log(events)
         return (
-            <Box>
+            // <Box>
                 <Box className="margin">
                     <img src={game.image} alt={game.title} className="background-img"/>
                     <Container className="center margin">
@@ -119,7 +119,7 @@ class GameDetails extends Component {
                         </GridList>                       
                     </Box>
                 </Box>
-            </Box>
+            // </Box>
         )
     }
 }

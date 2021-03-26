@@ -1,81 +1,78 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {Link} from 'react-router-dom'
 
-
+import Form from 'react-validation/build/form'
 import AuthService from "../services/AuthService";
 
 import '../styles/All.css'
 import { Button, TextField } from '@material-ui/core';
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: null,
-            username: '',
-            password: '',
-            loading: false,
-            message: ''
-        }
-        this.onChangeUsername = this.onChangeUsername.bind(this)
-        this.onChangePassword = this.onChangePassword.bind(this)
-        this.login = this.login.bind(this)
-    }
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
-    onChangeUsername(data) {
-        this.setState({
-            username: data.target.value
-        })
-    }
+import { login } from "../actions/auth";
 
-    onChangeEmail(data) {
-        this.setState({
-            email: data.target.value
-        })
+const Login = (props) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+  
+    const { isLoggedIn } = useSelector(state => state.auth);
+    const { message } = useSelector(state => state.message);
+  
+    const dispatch = useDispatch();
+  
+    const onChangeUsername = (e) => {
+      const username = e.target.value;
+      setUsername(username);
+    };
+  
+    const onChangePassword = (e) => {
+      const password = e.target.value;
+      setPassword(password);
+    };
+  
+    const handleLogin = (e) => {
+      e.preventDefault();
+    //   console.log(username, password)
+  
+      setLoading(true);
+  
+    //   form.current.validateAll();
+  
+    //   if (checkBtn.current.context._errors.length === 0) {
+        dispatch(login(username, password))
+          .then(() => {
+            props.history.push("/");
+            window.location.reload();
+          })
+          .catch(() => {
+            setLoading(false);
+          });
+    //   } else {
+        // setLoading(false);
+      
+    };
+  
+    if (isLoggedIn) {
+      return <Redirect to="/" />;
     }
+  
 
-    onChangePassword(data) {
-        this.setState({
-            password: data.target.value
-        })
-    }
-
-    login() {
-        let data = {
-            username: this.state.username,
-            password: this.state.password
-        };
-
-        AuthService.login(data)
-            .then(response => {
-                console.log(data)
-                console.log(response.data)
-                this.setState({
-                    id: response.data.id,
-                    username: response.data.username,
-                    password: response.data.password,
-                })
-                this.props.history.push('/')
-            })
-            .catch(error => {
-                console.log("oups: " + error)
-            })
-    }
-
-    render() {
-        return (
-            <div className="margin">
-                <h2>Connexion</h2>
-                <form>
-                    <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={this.state.username} onChange={this.onChangeUsername} name="username" />
-                    <TextField required id="standard-required" variant="outlined" label="Mot de passe" value={this.state.password} onChange={this.onChangePassword} name="password" />
-                    <Link to={'/'}>
-                        <Button variant="contained" type="submit" onClick={this.login}>
-                            Connexion
-                        </Button>
-                    </Link>
-                </form>
-            </div>
-        )
-    }
+    return(
+        <div className="margin">
+            <h2>Connexion</h2>
+            <form>
+                <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={username} onChange={onChangeUsername} name="username" />
+                <TextField required id="standard-required" variant="outlined" label="Mot de passe" value={password} onChange={onChangePassword} name="password" />
+                {/* <Link to={'/'}> */}
+                    <Button variant="contained" type="submit" onClick={handleLogin}>
+                        Connexion
+                    </Button>
+                {/* </Link> */}
+            </form>
+        </div>
+    )
 }
+
+export default Login

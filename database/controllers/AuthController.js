@@ -13,7 +13,7 @@ exports.signup = (req, res) => {
     User.create({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, 10)
     })
         .then(user => {
             if (req.body.roles) {
@@ -54,14 +54,14 @@ exports.signin = (req, res) => {
             var passwordIsValid = bcrypt.compareSync(
                 req.body.password,
                 user.password
-            );
-
-            if (!passwordIsValid) {
+              );
+        
+              if (!passwordIsValid) {
                 return res.status(401).send({
-                    accessToken: null,
-                    message: "Invalid Password!"
+                  accessToken: null,
+                  message: "Invalid Password!"
                 });
-            }
+              }
 
             var token = jwt.sign({ id: user.id }, config.secret, {
                 expiresIn: 86400 // 24 hours
@@ -69,16 +69,16 @@ exports.signin = (req, res) => {
 
             var authorities = [];
             user.getRoles().then(roles => {
-                for (let i = 0; i < roles.length; i++) {
-                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                }
-                res.status(200).send({
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    roles: authorities,
-                    accessToken: token
-                });
+              for (let i = 0; i < roles.length; i++) {
+                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+              }
+              res.status(200).send({
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                roles: authorities,
+                accessToken: token
+              });
             });
         })
         .catch(err => {

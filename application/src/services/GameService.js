@@ -2,7 +2,11 @@ import http from '../http-common'
 
 class GameService {
     findAll() {
-        return http.get('/games')
+        return http.get('/')
+    }
+
+    findAllUserGames(user) {
+        return http.get(`/games/user/${user}`)
     }
 
     findOne(id) {

@@ -52,7 +52,7 @@ exports.findAll = (req, res) => {
             }
         ],
         order: [
-            ['createdAt', 'DESC']
+            ['startedAt', 'DESC']
         ]
     })
     .then(data => {
@@ -84,6 +84,16 @@ exports.findOne = (req, res) => {
                 message: "L'évènement est introuvable : " + error
             })
         })
+}
+
+exports.deleteAfterStarted = (req, res) => {
+    Event.destroy(
+        {
+            where: {
+                startedAt: startedAt.getHours() + 1
+            }
+        }
+    ).then(console.log("deleted"))
 }
 
 Event.belongsTo(Game, {foreignKey: 'game_id'})

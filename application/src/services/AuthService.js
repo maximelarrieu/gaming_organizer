@@ -5,9 +5,12 @@ class AuthService {
         return http.post('/register', data)
     }
 
-    login(data) {
-        return http.post('/login', {data})
+    login(data, dato) {
+        console.log(data)
+        console.log(dato)
+        return http.post('/login', {username: data, password: dato})
             .then(response => {
+                console.log("response")
                 console.log(response.data)
                 if(response.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(response.data))
@@ -20,6 +23,10 @@ class AuthService {
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));;
     }
+
+    logout = () => {
+        localStorage.removeItem("user");
+    };
 }
 
 export default new AuthService();

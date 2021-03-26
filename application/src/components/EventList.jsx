@@ -5,10 +5,11 @@ import {Link} from 'react-router-dom'
 import "../styles/All.css"
 import "../styles/EventList.css"
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import { GridList, GridListTile, GridListTileBar, IconButton } from "@material-ui/core"
+import { GridList, GridListTile, GridListTileBar, Grid, Typography } from "@material-ui/core"
 import PersonIcon from '@material-ui/icons/Person';
 
 import EventService from '../services/EventService'
+import Moment from 'react-moment';
 
 class EventList extends Component {
     constructor(props) {
@@ -40,6 +41,17 @@ class EventList extends Component {
         this.findAll();
     }
 
+    isStarted(startedAt) {
+        const now = new Date()
+        console.log(Date.parse(now))
+        console.log()
+        if (Date.parse(now) >= Date.parse(startedAt)) {
+          return true
+        } else {
+          return false
+        }
+    }
+
     findAll() {
         EventService.findAll()
             .then(response => {
@@ -62,21 +74,30 @@ class EventList extends Component {
                 <GridList cellHeight={260} cols={this.getGridListCols()} spacing={15}>
                     {
                         events.map((event) =>
+                        {
+                            return(
                             <GridListTile key={event.id} cols={event.cols || 1}>
                                 <Link to={`events/${event.id}`}>
-                                <img src={ event.Game.image } alt={event.title} style={{ width: "100%" }} className="MuiGridListTile-imgFullHeight" />
+                                <img src={ event.Game.image } alt={event.title} style={{ color: (this.isStarted(event.startedAt) ? "#50b15f" : "black")}} className="card" />
+                                {this.isStarted(event.startedAt) ? <Typography variant="h2" className="started">STARTED</Typography> : ""}
                                     <GridListTileBar
                                         title={event.title}
                                         subtitle={event.description}
+                                        subtitle={<Typography variant="subtitle1">Début: <Moment format="DD-MM-YYYY hh:mm">{event.startedAt}</Moment></Typography>}
+                                        className="padding"
                                         actionIcon={
-                                            <IconButton className="icon">
-                                                <PersonIcon className="players"/> 0 / {event.players}
-                                            </IconButton>
+                                            <div className="align">
+                                                <PersonIcon className="icon"/>
+                                                <Typography variant="subtitle1">
+                                                    0 / {event.players}
+                                                </Typography>
+                                            </div>
                                         }
                                     />
                                 </Link>
                             </GridListTile>
-                        )
+                            )
+                        })
                     }
                 </GridList>
             </div>

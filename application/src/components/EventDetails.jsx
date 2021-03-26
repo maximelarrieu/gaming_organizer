@@ -1,7 +1,8 @@
 import React, {Component, ReactText} from 'react'
 
 import '../styles/All.css'
-import {Box, Grid, Paper} from '@material-ui/core';
+import '../styles/EventDetails.css'
+import {Box, Grid, Typography} from '@material-ui/core';
 
 import EventService from '../services/EventService'
 
@@ -18,6 +19,17 @@ export default class EventDetails extends Component {
 
     componentDidMount() {
         this.getEvent(this.props.match.params.id)
+    }
+
+    isStarted(startedAt) {
+        const now = new Date()
+        console.log(Date.parse(now))
+        console.log()
+        if (Date.parse(now) >= Date.parse(startedAt)) {
+          return true
+        } else {
+          return false
+        }
     }
 
     findOne(id) {

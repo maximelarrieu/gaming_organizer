@@ -1,6 +1,6 @@
 const db = require("../models")
 const User = db.User;
-const Op = db.Sequelize.Op;
+// const Op = db.Sequelize.Op;
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const privateKey = require('../auth')

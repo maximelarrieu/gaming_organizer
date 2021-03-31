@@ -14,9 +14,12 @@ class EventService {
     }
 
     create(data) {
-        console.log(data.organizer_id)
-        // console.log(data.game_id)
-        return http.post(`/events/${data.game_id}/create`, data)
+        return http.post(`/events/${data.game_id}/create/${data.organizer_id}`, data)
+    }
+
+    addUser(event, user) {
+        console.log(event)
+        return http.post(`/events/${event}/add/${user}`)
     }
 }
 

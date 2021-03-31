@@ -57,9 +57,13 @@ const EventCreate = (props) => {
         }
         EventService.create(data)
         .then((response) => {
-            console.log(response.data)
-            // props.history.push(`/events/${response.data.id}`);
-            // window.location.reload();
+            const id = response.data.id
+            console.log((id))
+            EventService.addUser(JSON.stringify(response.data.id), JSON.stringify(response.data.organizer_id));
+            // .then(() => {
+                props.history.push(`/events/${response.data.id}`);
+                window.location.reload();
+            // })
         })
     }
 

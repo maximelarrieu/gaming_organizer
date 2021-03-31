@@ -91,6 +91,26 @@ exports.findOne = (req, res) => {
         })
 }
 
+exports.addUser = (event_id, user_id) => {
+    return Event.findByPk(event_id.params.id)
+        .then((event) => {
+            if(!event) {
+                return "NOT FOUND"
+            }
+            return User.findByPk(event.organizer_id)
+                .then((user) => {
+                    if(!user) {
+                        return "USER NOT FOUND"
+                    }
+                    event.addUser(user);
+                    return event;
+                })
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+}
+
 exports.deleteAfterStarted = (req, res) => {
     Event.destroy(
         {

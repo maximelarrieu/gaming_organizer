@@ -48,8 +48,11 @@ export default class Register extends Component {
             password: this.state.password
         };
 
+        console.log(data)
+
         AuthService.register(data)
             .then(response => {
+                console.log(response)
                 this.setState({
                     id: response.data.id,
                     username: response.data.username,

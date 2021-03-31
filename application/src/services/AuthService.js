@@ -2,6 +2,7 @@ import http from '../http-common'
 
 class AuthService {
     register(data) {
+        console.log(data)
         return http.post('/register', data)
     }
 

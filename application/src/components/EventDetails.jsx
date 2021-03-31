@@ -13,7 +13,8 @@ export default class EventDetails extends Component {
 
         this.state = {
             event: [],
-            game: {}
+            game: {},
+            organizer: {},
         }
     }
 
@@ -37,7 +38,8 @@ export default class EventDetails extends Component {
             .then(response => {
                 this.setState({
                     event: response.data,
-                    game: response.data.Game
+                    game: response.data.Game,
+                    organizer: response.data.User
                 })
             })
             .catch(error => {
@@ -47,7 +49,10 @@ export default class EventDetails extends Component {
 
     render() {
         const {event} = this.state
+        console.log(event)
         const {game} = this.state
+        const {organizer} = this.state
+        console.log(organizer)
         return (
             <Box className="margin">
                 <Grid container spacing={3}>
@@ -56,6 +61,13 @@ export default class EventDetails extends Component {
                     </Grid>
                     <Grid item xl={4} lg={4} md={6}>
                         <h2>{event.title}</h2>
+                        {
+                            organizer
+                            ?
+                            <h4>{organizer.username}</h4>
+                            :
+                            <h4>NOPE</h4>
+                        }
                         <p>{game.title}</p>
                         <p>{event.startedAt}</p>
                         <i>{event.description}</i>

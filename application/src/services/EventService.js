@@ -9,12 +9,12 @@ class EventService {
         return http.get(`/events/${id}`)
     }
 
-    toCreate(id) {
-        return http.get(`events/${id}/create`)
+    toCreate(id, user) {
+        return http.get(`events/${id}/create/${user}`)
     }
 
     create(data) {
-        console.log(data)
+        console.log(data.organizer_id)
         // console.log(data.game_id)
         return http.post(`/events/${data.game_id}/create`, data)
     }

@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       Event.belongsTo(models.User, {
         foreignKey: 'organizer_id'
       })
+      Event.belongsToMany(models.User, {
+        through: "users_events"
+      })
     }
 
     static isStarted() {

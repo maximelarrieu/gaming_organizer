@@ -49,7 +49,7 @@ function App() {
         <Route exact path="/games/user/:user" component={GameList} />
         <Route exact path="/games/:id" component={GameDetails} />
         <Route exact path="/events" component={EventList} />
-        <Route exact path="/events/:id/create" component={EventCreate} />
+        <Route exact path="/events/:id/create/:user" component={EventCreate} />
         <Route exact path="/events/:id" component={EventDetails} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />

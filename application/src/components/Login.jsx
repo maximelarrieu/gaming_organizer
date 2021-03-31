@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import {Link} from 'react-router-dom'
 
 import Form from 'react-validation/build/form'
@@ -60,16 +60,18 @@ const Login = (props) => {
   
 
     return(
-        <div className="margin">
+        <div className="margin center">
             <h2>Connexion</h2>
             <form>
-                <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={username} onChange={onChangeUsername} name="username" />
-                <TextField required id="standard-required" variant="outlined" label="Mot de passe" value={password} onChange={onChangePassword} name="password" />
-                {/* <Link to={'/'}> */}
-                    <Button variant="contained" type="submit" onClick={handleLogin}>
+                <div className="margin">
+                  <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={username} onChange={onChangeUsername} name="username" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />
+                </div>
+                <div className="margin">
+                <TextField required type="password" id="standard-required" variant="outlined" label="Mot de passe" value={password} onChange={onChangePassword} name="password" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />
+                </div>
+                    <Button className="test" variant="contained" type="submit" onClick={handleLogin} style={{backgroundColor: "black", color: "white"}}>
                         Connexion
                     </Button>
-                {/* </Link> */}
             </form>
         </div>
     )

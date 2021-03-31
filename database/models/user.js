@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       }),
       User.belongsToMany(models.Game, {
         through: "users_games"
+      }),
+      User.belongsToMany(models.Event, {
+        through: "users_events"
       })
     }
   };

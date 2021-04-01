@@ -55,3 +55,7 @@ exports.adminBoard = (req, res) => {
 exports.moderatorBoard = (req, res) => {
     res.status(200).send("Moderator Content.");
 };
+
+exports.findAllinEvent  = (req, res) => {
+    
+}

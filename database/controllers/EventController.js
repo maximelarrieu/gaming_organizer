@@ -75,7 +75,6 @@ exports.findOne = (req, res) => {
         include: [
         {
             model: Game,
-            // attributes: ['title', 'description', 'image']
         },
         {
             model: User
@@ -94,13 +93,33 @@ exports.findOne = (req, res) => {
         })
 }
 
-exports.addUser = (event_id, user_id) => {
+exports.addOrganizer = (event_id, user_id) => {
     return Event.findByPk(event_id.params.id)
         .then((event) => {
             if(!event) {
                 return "NOT FOUND"
             }
             return User.findByPk(event.organizer_id)
+                .then((user) => {
+                    if(!user) {
+                        return "USER NOT FOUND"
+                    }
+                    event.addUser(user);
+                    return event;
+                })
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+}
+
+exports.addUser = (event_id, user_id) => {
+    return Event.findByPk(event_id.params.id)
+        .then((event) => {
+            if(!event) {
+                return "NOT FOUND"
+            }
+            return User.findByPk(user_id.req.params.user)
                 .then((user) => {
                     if(!user) {
                         return "USER NOT FOUND"
@@ -123,5 +142,3 @@ exports.deleteAfterStarted = (req, res) => {
         }
     ).then(console.log("deleted"))
 }
-
-Event.belongsTo(Game, {foreignKey: 'game_id'})

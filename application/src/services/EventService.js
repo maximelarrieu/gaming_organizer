@@ -19,7 +19,16 @@ class EventService {
 
     addUser(event, user) {
         console.log(event)
+        return http.post(`/events/${event}/organizer/${user}`)
+    }
+
+    addOthers(event, user) {
+        console.log(event)
         return http.post(`/events/${event}/add/${user}`)
+    }
+
+    findUsersInEvent(id) {
+        return http.get(`/events/${id}`)
     }
 }
 

@@ -90,11 +90,9 @@ const EventCreate = (props) => {
             <Typography className="grey-label" variant="subtitle2">Date et heure de début *</Typography>
             <DateTimePicker timeConstraints={{minutes: {step: 5}}} inputProps={inputProps} initialValue={new Date()} dateFormat="DD-MM-YYYY" timeFormat="HH:mm" label="Début" value={startedAt} onChange={onChangeStartedAt} name="startedAt" InputLabelProps={{ style: {color: "grey"}, inputProps: {min: new Date()}}}/>
             </div>
-            {/* <Link to={'/events'}> */}
-                <Button variant="contained" type="submit" onClick={handleSubmit}>
-                    <AddIcon /> Valider
-                </Button>
-            {/* </Link> */}
+            <Button variant="contained" type="submit" onClick={handleSubmit}>
+                <AddIcon /> Valider
+            </Button>
         </form>
     </Container>
     )

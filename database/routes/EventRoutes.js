@@ -22,9 +22,11 @@ module.exports = app => {
     let router = require('express').Router();
 
     router.post("/events/:id/create/:user", cors(corsOptions), jsonParser, urlencodedParser, events.create)
+    router.post("/events/:id/organizer/:user", cors(corsOptions), jsonParser, urlencodedParser, events.addOrganizer)
     router.post("/events/:id/add/:user", cors(corsOptions), jsonParser, urlencodedParser, events.addUser)
     router.get("/events", cors(corsOptions), events.findAll);
     router.get("/events/:id", cors(corsOptions), events.findOne);
+    // router.get("/events/:id", cors(corsOptions), events.findUsersInEvent);
 
     app.use('/api', router)
 }

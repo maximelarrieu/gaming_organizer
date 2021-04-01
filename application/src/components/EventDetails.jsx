@@ -1,28 +1,47 @@
-import React, {Component, ReactText} from 'react'
+import React, {useEffect, useState} from 'react'
+import { useSelector } from "react-redux";
 
 import '../styles/All.css'
 import '../styles/EventDetails.css'
-import {Box, Grid, Typography} from '@material-ui/core';
+import {Box, Grid, Button} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 import EventService from '../services/EventService'
+import UserService from '../services/UserService'
 
-export default class EventDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.getEvent = this.findOne.bind(this)
+const EventDetails = (props) => {
+    const [event, setEvent] = useState("")
+    const [game, setGame] = useState("")
+    const [user, setUser] = useState("")
+    const [participants, setParticants] = useState("")
+    const {user: currentUser} = useSelector((state) => state.auth)
 
-        this.state = {
-            event: [],
-            game: {},
-            organizer: {},
-        }
-    }
+    console.log(currentUser)
 
-    componentDidMount() {
-        this.getEvent(this.props.match.params.id)
-    }
+    useEffect(() => {
+        EventService.findOne(props.match.params.id)
+            .then(response => {
+                console.log(response.data)
+                setEvent(response.data)
+                setGame(response.data.Game)
+                setUser(response.data.User)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
 
-    isStarted(startedAt) {
+    // useEffect(() => {
+    //     EventService.findUsersInEvent(props.match.params.id)
+    //         .then(response => {
+    //             console.log(response.data)
+    //         })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }, [])
+
+    const isStarted = (startedAt) => {
         const now = new Date()
         console.log(Date.parse(now))
         console.log()
@@ -33,47 +52,37 @@ export default class EventDetails extends Component {
         }
     }
 
-    findOne(id) {
-        EventService.findOne(id)
-            .then(response => {
-                this.setState({
-                    event: response.data,
-                    game: response.data.Game,
-                    organizer: response.data.User
-                })
-            })
-            .catch(error => {
-                console.log(error)
-            })
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        console.log(JSON.stringify(currentUser.id))
+        EventService.addOthers(props.match.params.id, JSON.stringify(currentUser.id))
     }
 
-    render() {
-        const {event} = this.state
-        console.log(event)
-        const {game} = this.state
-        const {organizer} = this.state
-        console.log(organizer)
-        return (
-            <Box className="margin">
-                <Grid container spacing={3}>
-                    <Grid item xl={8} lg={8} md={6}>
-                        <img src={game.image} alt={game.title} style={{ width: "100%" }} />
-                    </Grid>
-                    <Grid item xl={4} lg={4} md={6}>
-                        <h2>{event.title}</h2>
-                        {
-                            organizer
-                            ?
-                            <h4>{organizer.username}</h4>
-                            :
-                            <h4>NOPE</h4>
-                        }
-                        <p>{game.title}</p>
-                        <p>{event.startedAt}</p>
-                        <i>{event.description}</i>
-                    </Grid>
+    return (
+        <Box className="margin">
+            <Grid container spacing={3}>
+                <Grid item xl={8} lg={8} md={6}>
+                    <img src={game.image} alt={game.title} style={{ width: "100%" }} />
                 </Grid>
-            </Box>
-        )
-    }
+                <Grid item xl={4} lg={4} md={6}>
+                    <h2>{event.title}</h2>
+                    {
+                        event.organizer_id
+                        ?
+                        <h4>a</h4>
+                        :
+                        <h4>NOPE</h4>
+                    }
+                    <p>{game.title}</p>
+                    <p>{event.startedAt}</p>
+                    <i>{event.description}</i>
+                    <Button variant="contained" type="submit" onClick={handleSubmit}>
+                        <AddIcon /> Valider
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
+    )
 }
+
+export default EventDetails

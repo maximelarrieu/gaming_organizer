@@ -10,6 +10,7 @@ import { clearMessage } from "./actions/message";
 import NavBar from './components/NavBar.jsx';
 import Home from './components/Home.jsx';
 import GameList from './components/GameList.jsx';
+import UserGameList from './components/UserGameList.jsx';
 import GameDetails from './components/GameDetails.jsx';
 import EventList from './components/EventList.jsx';
 import EventDetails from './components/EventDetails.jsx';
@@ -46,7 +47,8 @@ function App() {
       <NavBar />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/games/user/:user" component={GameList} />
+        <Route exact path="/games" component={GameList} />
+        <Route exact path="/games/user/:user" component={UserGameList} />
         <Route exact path="/games/:id" component={GameDetails} />
         <Route exact path="/events" component={EventList} />
         <Route exact path="/events/:id/create/:user" component={EventCreate} />

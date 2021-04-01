@@ -2,7 +2,7 @@ import http from '../http-common'
 
 class GameService {
     findAll() {
-        return http.get('/')
+        return http.get('/games')
     }
 
     findAllUserGames(user) {

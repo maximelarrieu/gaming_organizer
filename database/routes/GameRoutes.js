@@ -11,10 +11,8 @@ module.exports = app => {
 
     let router = require('express').Router();
 
-    router.get("/", cors(corsOptions), games.findAll)
-
+    router.get("/games", cors(corsOptions), games.findAll)
     router.get("/games/user/:user", cors(corsOptions), games.findAllUserGames);
-
     router.get("/games/:id", cors(corsOptions), games.findOne)
 
     app.use('/api', router)

@@ -80,7 +80,10 @@ exports.findOne = (req, res) => {
         {
             model: User
         }
-    ]})
+    ],
+        where: {
+            '$eventId$': id
+        }})
         .then(data => {
             res.send(data)
         })

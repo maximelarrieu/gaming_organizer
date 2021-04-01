@@ -5,18 +5,18 @@ import { useSelector } from "react-redux";
 import "../styles/All.css"
 import "../styles/GameList.css"
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import {Box, GridList, GridListTile, GridListTileBar, Typography} from "@material-ui/core"
+import {Box, Button, GridList, GridListTile, GridListTileBar, Typography} from "@material-ui/core"
 
 import GameService from '../services/GameService'
 
-const GameList = (props) => {
+const UserGameList = (props) => {
 
     const [games, setGames] = useState("")
 
     const {user: currentUser} = useSelector((state) => state.auth)
 
     useEffect(() => {
-        GameService.findAll()
+        GameService.findAllUserGames(currentUser.id)
             .then(response => {
                 setGames(response.data)
                 console.log(response.data)
@@ -67,11 +67,16 @@ const GameList = (props) => {
                 
                 )
                 :
-                <Typography variant="h5">No games rn</Typography>
+                <div>
+                    <Typography variant="h5">Vous n'avez choisi aucun jeu</Typography>
+                    <Link to={"/games"}>
+                        <Button variant="contained">Game List</Button>
+                    </Link>
+                </div>
             }
         </GridList>
     </Box>
     )
 }
 
-export default withWidth()(GameList)
+export default withWidth()(UserGameList)

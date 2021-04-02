@@ -13,6 +13,8 @@
     "moment": "^2.29.1",
     "rc-calendar": "^9.15.11",
     "react": "^17.0.1",
+    "react-alert": "^7.0.2",
+    "react-alert-template-mui": "^1.0.7",
     "react-bootstrap": "^1.4.3",
     "react-datetime": "^3.0.4",
     "react-datetime-picker": "^3.0.5",

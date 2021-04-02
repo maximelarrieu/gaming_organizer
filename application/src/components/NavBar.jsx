@@ -21,7 +21,7 @@ const NavBar = () => {
                 currentUser 
                 ? 
                 <Button>
-                    <a href={'/games/user/' + currentUser.id} className='others-button'>MES JEUX</a>
+                    <a href={'/profile/' + currentUser.id} className='others-button'>MON PROFIL</a>
                 </Button>
                 :
                 <>

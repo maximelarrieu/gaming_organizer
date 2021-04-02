@@ -1,4 +1,3 @@
-const auth = require('../auth/authJwt')
 const cors = require('cors')
 
 const corsOptions = {
@@ -7,14 +6,11 @@ const corsOptions = {
 }
 
 module.exports = app => {
-    const games = require("../controllers/GameController");
+    const users = require("../controllers/UserController");
 
     let router = require('express').Router();
 
-    router.get("/games", cors(corsOptions), games.findAll)
-    router.get("/games/user/:user", cors(corsOptions), games.findAllUserGames);
-    router.get("/games/:id", cors(corsOptions), games.findOne)
-    router.post("/games/:id/add/:user", cors(corsOptions), games.addUser)
+    router.get("/profile/:id", cors(corsOptions), users.profile)
 
     app.use('/api', router)
     app.get('*', function(req, res,next){

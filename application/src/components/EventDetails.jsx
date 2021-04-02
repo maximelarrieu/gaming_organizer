@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { useSelector } from "react-redux";
+import {Link} from "react-router-dom"
 
 import '../styles/All.css'
 import '../styles/EventDetails.css'
@@ -43,8 +44,6 @@ const EventDetails = (props) => {
 
     const isStarted = (startedAt) => {
         const now = new Date()
-        console.log(Date.parse(now))
-        console.log()
         if (Date.parse(now) >= Date.parse(startedAt)) {
           return true
         } else {
@@ -69,7 +68,10 @@ const EventDetails = (props) => {
                     {
                         event.organizer_id
                         ?
-                        <h4>a</h4>
+                        <div>
+                            <h4>{user.username}</h4>
+                            <Link to={`/profile/${user.id}`}>Voir profil</Link>
+                        </div>
                         :
                         <h4>NOPE</h4>
                     }
@@ -77,7 +79,7 @@ const EventDetails = (props) => {
                     <p>{event.startedAt}</p>
                     <i>{event.description}</i>
                     <Button variant="contained" type="submit" onClick={handleSubmit}>
-                        <AddIcon /> Valider
+                        <AddIcon /> Participer
                     </Button>
                 </Grid>
             </Grid>

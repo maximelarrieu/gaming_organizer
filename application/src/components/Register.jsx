@@ -1,88 +1,72 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
-
+import React, { useState } from 'react';
 
 import AuthService from "../services/AuthService";
 
 import '../styles/All.css'
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 
-export default class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: null,
-            username: '',
-            email: '',
-            password: '',
-            submitted: false
+const Register = (props) => {
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+
+    const onChangeUsername = (data) => {
+        const username = data.target.value;
+        setUsername(username)
+    }
+    const onChangeEmail = (data) => {
+        const email = data.target.value;
+        setEmail(email)
+    }
+    const onChangePassword = (data) => {
+        const password = data.target.value;
+        setPassword(password)
+    }
+
+    const handleSubmit = (user) => {
+        user.preventDefault()
+        const data = {
+            username: username,
+            email: email,
+            password: password
         }
-        this.onChangeUsername = this.onChangeUsername.bind(this)
-        this.onChangeEmail = this.onChangeEmail.bind(this)
-        this.onChangePassword = this.onChangePassword.bind(this)
-        this.register = this.register.bind(this)
-    }
-
-    onChangeUsername(data) {
-        this.setState({
-            username: data.target.value
-        })
-    }
-
-    onChangeEmail(data) {
-        this.setState({
-            email: data.target.value
-        })
-    }
-
-    onChangePassword(data) {
-        this.setState({
-            password: data.target.value
-        })
-    }
-
-    register() {
-        let data = {
-            username: this.state.username,
-            email: this.state.email,
-            password: this.state.password
-        };
-
-        console.log(data)
-
         AuthService.register(data)
-            .then(response => {
-                console.log(response)
-                this.setState({
-                    id: response.data.id,
-                    username: response.data.username,
-                    email: response.data.email,
-                    password: response.data.password,
-                    submitted: true
-                })
-                console.log(response.data)
-                this.props.history.push('/')
+            .then(() => {
+                props.history.push('/login')
             })
-            .catch(error => {
-                console.log("oups: " + error)
+            .catch((err) => {
+                const error = err.response.data.message
+                setError(error)
             })
     }
 
-    render() {
-        return (
+    return (
+        <div className="margin center">
+        <h2>Inscription</h2>
+        {
+            error
+            ?
+            <Typography variant="subtitle2" style={{color: "red"}}>{error}</Typography>
+            :
+            null
+        }
+        <form>
             <div className="margin">
-                <h2>S'inscrire</h2>
-                <form>
-                    <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={this.state.username} onChange={this.onChangeUsername} name="username" />
-                    <TextField required id="standard-required" variant="outlined" label="Email" value={this.state.email} onChange={this.onChangeEmail} name="email" />
-                    <TextField required id="standard-required" variant="outlined" label="Mot de passe" value={this.state.password} onChange={this.onChangePassword} name="password" />
-                    <Link to={'/'}>
-                        <Button variant="contained" type="submit" onClick={this.register}>
-                            S'inscrire
-                        </Button>
-                    </Link>
-                </form>
+              <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={username} onChange={onChangeUsername} name="username" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />
             </div>
-        )
-    }
+            <div className="margin">
+              <TextField required id="standard-required" variant="outlined" label="Email" value={email} onChange={onChangeEmail} name="email" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />
+            </div>
+            <div className="margin">
+            <TextField required type="password" id="standard-required" variant="outlined" label="Mot de passe" value={password} onChange={onChangePassword} name="password" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />
+            </div>
+            <Button className="test" variant="contained" type="submit" onClick={handleSubmit} style={{backgroundColor: "black", color: "white"}}>
+                Inscription
+            </Button>
+        </form>
+    </div>
+    )
 }
+
+export default Register

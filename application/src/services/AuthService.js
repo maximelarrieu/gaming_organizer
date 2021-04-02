@@ -2,21 +2,15 @@ import http from '../http-common'
 
 class AuthService {
     register(data) {
-        console.log(data)
         return http.post('/register', data)
     }
 
-    login(data, dato) {
-        console.log(data)
-        console.log(dato)
-        return http.post('/login', {username: data, password: dato})
+    login(username, password) {
+        return http.post('/login', {username: username, password: password})
             .then(response => {
-                console.log("response")
-                console.log(response.data)
                 if(response.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(response.data))
                 }
-                console.log(response.data)
                 return response.data
             })
     }

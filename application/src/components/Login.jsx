@@ -5,7 +5,7 @@ import Form from 'react-validation/build/form'
 import AuthService from "../services/AuthService";
 
 import '../styles/All.css'
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from 'react-router-dom';
@@ -15,7 +15,7 @@ import { login } from "../actions/auth";
 const Login = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [errore, setError] = useState("");
   
     const { isLoggedIn } = useSelector(state => state.auth);
     const { message } = useSelector(state => state.message);
@@ -34,34 +34,28 @@ const Login = (props) => {
   
     const handleLogin = (e) => {
       e.preventDefault();
-    //   console.log(username, password)
-  
-      setLoading(true);
-  
-    //   form.current.validateAll();
-  
-    //   if (checkBtn.current.context._errors.length === 0) {
-        dispatch(login(username, password))
-          .then(() => {
-            props.history.push("/");
-            window.location.reload();
-          })
-          .catch(() => {
-            setLoading(false);
-          });
-    //   } else {
-        // setLoading(false);
-      
-    };
+      dispatch(login(username, password))
+        .then((res) => {
+          console.log(res)
+          props.history.push("/");
+          window.location.reload();
+        })
+    }
   
     if (isLoggedIn) {
       return <Redirect to="/" />;
     }
   
-
     return(
         <div className="margin center">
             <h2>Connexion</h2>
+            {/* {
+              error
+              ?
+              <Typography variant="subtitle2" style={{color: "red"}}>{error}</Typography>
+              :
+              null
+            } */}
             <form>
                 <div className="margin">
                   <TextField required id="standard-required" variant="outlined" label="Nom d'utilisateur" value={username} onChange={onChangeUsername} name="username" InputLabelProps={{style: {color: "grey"}}} inputProps={{style: {color: "white"}}} />

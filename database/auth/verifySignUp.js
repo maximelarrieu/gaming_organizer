@@ -1,23 +1,23 @@
-const db = require('../models/user')
+const db = require('../models')
 // const ROLES = db.Role
-// const User = db.User;
+const User = db.User;
 
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
-    // Username
-    console.log("--------")
-    console.log(db.User)
     User.findOne({
         where: {
             username: req.body.username
         }
     }).then(user => {
+        console.log(user)
         if (user) {
+            console.log("AH")
             res.status(400).send({
-                message: "Failed! Username is already in use!"
+                message: "Désolé ! Ce nom d'utilisateur est déjà utilisé"
             });
             return;
         }
+        console.log("BH")
 
         // Email
         User.findOne({
@@ -26,11 +26,15 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
             }
         }).then(user => {
             if (user) {
+            console.log("CH")
+
                 res.status(400).send({
-                    message: "Failed! Email is already in use!"
+                    message: "Désolé ! Cette adresse email est déjà utilisée"
                 });
                 return;
             }
+            console.log("DH")
+
 
             next();
         });

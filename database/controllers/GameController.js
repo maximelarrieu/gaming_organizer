@@ -46,12 +46,17 @@ exports.findAllUserGames = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+    console.log("********************")
+    console.log(db)
     const id = req.params.id
 
     Game.findByPk(id, {
         include: [
             {
                 model: Event
+            },
+            {
+                model: User
             }
         ]
     })
@@ -65,4 +70,23 @@ exports.findOne = (req, res) => {
         })
 }
 
-// Game.hasMany(Event, { as: "event_id"})
+exports.addUser = (game_id, user_id) => {
+    console.log(game_id)
+    return Game.findByPk(game_id.params.id)
+        .then((game) => {
+            if(!game) {
+                return "NOT FOUND"
+            }
+            return User.findByPk(user_id.req.params.user)
+                .then((user) => {
+                    if(!user) {
+                        return "USER NOT FOUND"
+                    }
+                    game.addUser(user);
+                    return game
+                })
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+}

@@ -1,16 +1,14 @@
 const db = require("../models")
-const User = db.User;
-// const Op = db.Sequelize.Op;
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const privateKey = require('../auth')
+const User = db.User
+const Game = db.Game
+const Event = db.Event
 
 exports.findOne = (req, res) => {
     const username = req.query.username;
     const email = req.query.email;
     const password = req.query.password;
 
-    User.findOne({where: { username: req.body.username, email: req.body.email, password: req.body.password}})
+    User.findOne({where: { username: username, email: email, password: password}})
     .then(user => {
         if(!user) {
             const message = "L'utilisateur n'existe pas."
@@ -40,22 +38,27 @@ exports.findOne = (req, res) => {
     });
 }
 
-exports.allAccess = (req, res) => {
-    res.status(200).send("Public Content.");
-};
-
-exports.userBoard = (req, res) => {
-    res.status(200).send("User Content.");
-};
-
-exports.adminBoard = (req, res) => {
-    res.status(200).send("Admin Content.");
-};
-
-exports.moderatorBoard = (req, res) => {
-    res.status(200).send("Moderator Content.");
-};
-
-exports.findAllinEvent  = (req, res) => {
-    
+exports.profile = (req, res) => {
+    const id = req.params.id
+    User.findByPk(id, {
+        include: [
+            {
+                model: Game
+            },
+            {
+                model: Event,
+                include: [
+                    {model: Game}
+                ]
+            }
+        ]
+    })
+    .then((data) => {
+        res.send(data)
+    })
+    .catch(error => {
+        res.status(500).send({
+            message: "L'utilisateur est introuvable : " + error
+        })
+    })
 }

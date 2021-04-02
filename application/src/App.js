@@ -15,6 +15,7 @@ import GameDetails from './components/GameDetails.jsx';
 import EventList from './components/EventList.jsx';
 import EventDetails from './components/EventDetails.jsx';
 import EventCreate from './components/EventCreate.jsx';
+import Profile from './components/Profile.jsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
 
@@ -53,6 +54,7 @@ function App() {
         <Route exact path="/events" component={EventList} />
         <Route exact path="/events/:id/create/:user" component={EventCreate} />
         <Route exact path="/events/:id" component={EventDetails} />
+        <Route exact path="/profile/:id" component={Profile} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
       </Switch>

@@ -44,23 +44,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 require("./routes/GameRoutes")(app);
 require("./routes/EventRoutes")(app);
 require('./routes/SecurityRoutes')(app);
+require("./routes/UserRoutes")(app);
 
 app.listen(port, () => console.log(`Port sur écoute : ${port}`));
 const db = require('./models');
-
-// // Relation One To Many between Event & Game
-// db.Event.belongsTo(db.Game, {foreignKey: 'game_id'})
-// db.Game.hasMany(db.Event, {foreignKey: 'game_id'})
-
-// db.Event.belongsTo(db.User, {foreignKey: 'organizer_id'})
-// db.User.hasMany(db.Event, {foreignKey: 'organizer_id'})
-// // Relation Many To Many between Role & User
-// db.Role.belongsToMany(db.User, {through: "user_roles", foreignKey: "roleId", otherKey: "userId"})
-// db.User.belongsToMany(db.Role, {through: "user_roles", foreignKey: "userId", otherKey: "roleId"})
-// // Relation Many To Many between User & Game
-// db.Game.belongsToMany(db.User, {through: "user_games", foreignKey: "gameId", otherKey:"userId"})
-// db.User.belongsToMany(db.Game, {through: "user_games", foreignKey: "userId", otherKey:"gameId"})
-
 db.ROLES = ["user", "admin", "moderator"]
 
 const Role = db.Role

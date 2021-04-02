@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 
 import {Link} from 'react-router-dom'
 
@@ -10,41 +10,24 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import EventService from '../services/EventService'
 import Moment from 'react-moment';
+import { useSelector } from 'react-redux';
 
-class EventList extends Component {
-    constructor(props) {
-        super(props);
-        this.findAll = this.findAll.bind(this)
+const EventList = (props) => {
+    const [events, setEvents] = useState("")
+    const {user: currentUser} = useSelector((state) => state.auth)
 
-        this.state = {
-            events: []
-        }
-    }
+    useEffect(() => {
+        EventService.findAll()
+            .then(response => {
+                setEvents(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
 
-    getGridListCols = () => {
-        if (isWidthUp('xl', this.props.width)) {
-        return 4;
-        }
-
-        if (isWidthUp('lg', this.props.width)) {
-        return 3;
-        }
-
-        if (isWidthUp('md', this.props.width)) {
-        return 2;
-        }
-
-        return 1;
-    }
-
-    componentDidMount() {
-        this.findAll();
-    }
-
-    isStarted(startedAt) {
+    const isStarted = (startedAt) => {
         const now = new Date()
-        console.log(Date.parse(now))
-        console.log()
         if (Date.parse(now) >= Date.parse(startedAt)) {
           return true
         } else {
@@ -52,57 +35,60 @@ class EventList extends Component {
         }
     }
 
-    findAll() {
-        EventService.findAll()
-            .then(response => {
-                this.setState({
-                    events: response.data
-                });
-                console.log(response.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    const getGridListCols = () => {
+        if (isWidthUp('xl', props.width)) {
+            return 4;
+        }
+
+        if (isWidthUp('lg', props.width)) {
+            return 3;
+        }
+
+        if (isWidthUp('md', props.width)) {
+            return 2;
+        }
+        return 1;
     }
 
-    render() {
-        const {events} = this.state;
-        console.log(events)
-        return(
-            <div className="margin">
-                <h3>LISTE DES EVENEMENTS</h3>
-                <GridList cellHeight={260} cols={this.getGridListCols()} spacing={15}>
+    return (
+        <div className="margin">
+            <h3>LISTE DES EVENEMENTS</h3>
+            <GridList cellHeight={260} cols={getGridListCols()} spacing={15}>
+                {
+                    events.length > 0
+                    ?
+                    events.map((event) =>
                     {
-                        events.map((event) =>
-                        {
-                            return(
-                            <GridListTile key={event.id} cols={event.cols || 1}>
-                                <Link to={`events/${event.id}`}>
-                                <img src={ event.Game.image } alt={event.title} style={{ color: (this.isStarted(event.startedAt) ? "#50b15f" : "black")}} className="card" />
-                                {this.isStarted(event.startedAt) ? <Typography variant="h2" className="started">STARTED</Typography> : ""}
-                                    <GridListTileBar
-                                        title={event.title}
-                                        subtitle={event.description}
-                                        subtitle={<Typography variant="subtitle1">Début: <Moment format="DD-MM-YYYY hh:mm">{event.startedAt}</Moment></Typography>}
-                                        className="padding"
-                                        actionIcon={
-                                            <div className="align">
-                                                <PersonIcon className="icon"/>
-                                                <Typography variant="subtitle1">
-                                                    0 / {event.players}
-                                                </Typography>
-                                            </div>
-                                        }
-                                    />
-                                </Link>
-                            </GridListTile>
-                            )
-                        })
-                    }
-                </GridList>
-            </div>
-        )
-    }
+                        return(
+                        <GridListTile key={event.id} cols={event.cols || 1}>
+                            <Link to={`events/${event.id}`}>
+                            <img src={ event.Game.image } alt={event.Game.title} style={{ color: (isStarted(event.startedAt) ? "#50b15f" : "black")}} className="card" />
+                            {isStarted(event.startedAt) ? <Typography variant="h2" className="started">STARTED</Typography> : ""}
+                                <GridListTileBar
+                                    title={event.title}
+                                    subtitle={event.description}
+                                    subtitle={<Typography variant="subtitle1">Début: <Moment format="DD-MM-YYYY hh:mm">{event.startedAt}</Moment></Typography>}
+                                    className="padding"
+                                    actionIcon={
+                                        <div className="align">
+                                            <PersonIcon className="icon"/>
+                                            <Typography variant="subtitle1">
+                                                0 / {event.players}
+                                            </Typography>
+                                        </div>
+                                    }
+                                />
+                            </Link>
+                        </GridListTile>
+                        )
+                    })
+                    :
+                    <Typography variant='h5'>Aucun évènement</Typography>
+                }
+            </GridList>
+        </div>
+    )
+
 }
 
 export default withWidth()(EventList)

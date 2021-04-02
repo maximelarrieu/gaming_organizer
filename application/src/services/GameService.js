@@ -12,6 +12,10 @@ class GameService {
     findOne(id) {
         return http.get(`/games/${id}`)
     }
+
+    addUser(game, user) {
+        return http.post(`/games/${game}/add/${user}`)
+    }
 }
 
 export default new GameService();

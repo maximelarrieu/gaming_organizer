@@ -49,7 +49,9 @@ const UserGameList = (props) => {
     return (
     <Box className="margin">
         <Typography variant="h4">MES JEUX</Typography>
-        <Typography>{currentUser.username}</Typography>
+        <Link to={"/games"}>
+            <Button variant="contained">Liste de tous jeux</Button>
+        </Link>
         <GridList cellHeight={260} cols={getGridListCols()} spacing={15}>
             {
                 games.length > 0
@@ -69,9 +71,6 @@ const UserGameList = (props) => {
                 :
                 <div>
                     <Typography variant="h5">Vous n'avez choisi aucun jeu</Typography>
-                    <Link to={"/games"}>
-                        <Button variant="contained">Game List</Button>
-                    </Link>
                 </div>
             }
         </GridList>

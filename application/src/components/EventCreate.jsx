@@ -16,7 +16,6 @@ const EventCreate = (props) => {
     const game = props.match.params.id
     const {user: currentUser} = useSelector((state) => state.auth)
     const organizer = props.match.params.user
-    console.log(organizer)
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [players, setPlayers] = useState("");

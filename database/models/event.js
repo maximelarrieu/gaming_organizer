@@ -2,8 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const Game = require('./game')
-const User = require('./user')
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     /**
@@ -19,9 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       Event.belongsTo(models.User, {
         foreignKey: 'organizer_id'
       })
-      Event.belongsToMany(models.User, {
-        through: "users_events"
+      Event.hasMany(models.usersEvents, {
+        foreignKey: 'EventId',
+        onDelete: 'cascade'
       })
+      //   {
+      //     as:'uEvents',
+      //     through: models.usersEvents
+      //   })
     }
 
     static isStarted() {

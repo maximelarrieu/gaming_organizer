@@ -2,6 +2,7 @@ const db = require("../models");
 const Event = db.Event;
 const Game = db.Game;
 const User = db.User;
+const UsersEvents = db.usersEvents;
 
 exports.toCreate = (req, res) => {
     const id = req.params.id
@@ -73,16 +74,20 @@ exports.findOne = (req, res) => {
 
     Event.findByPk(id, {
         include: [
-        {
-            model: Game,
-        },
-        {
-            model: User
-        }
-    ],
-        where: {
-            '$eventId$': id
-        }})
+            {
+                model: User
+            },
+            {
+                model: UsersEvents,
+                include: {
+                    model: User
+                }
+            },
+            {
+                model: Game
+            }   
+        ]
+    })
         .then(data => {
             res.send(data)
         })
@@ -93,7 +98,7 @@ exports.findOne = (req, res) => {
         })
 }
 
-exports.addOrganizer = (event_id, user_id) => {
+exports.addOrganizer = (event_id, user_id, res) => {
     return Event.findByPk(event_id.params.id)
         .then((event) => {
             if(!event) {
@@ -104,8 +109,11 @@ exports.addOrganizer = (event_id, user_id) => {
                     if(!user) {
                         return "USER NOT FOUND"
                     }
-                    event.addUser(user);
-                    return event;
+                    const userEvent = {
+                        EventId: event.id,
+                        UserId: user.id
+                    }
+                    UsersEvents.create(userEvent)
                 })
         })
         .catch((err) => {
@@ -124,8 +132,11 @@ exports.addUser = (event_id, user_id) => {
                     if(!user) {
                         return "USER NOT FOUND"
                     }
-                    event.addUser(user);
-                    return event;
+                    const userEvent = {
+                        EventId: event.id,
+                        UserId: user.id
+                    }
+                    UsersEvents.create(userEvent)
                 })
         })
         .catch((err) => {

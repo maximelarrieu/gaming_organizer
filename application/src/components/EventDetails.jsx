@@ -6,6 +6,7 @@ import '../styles/All.css'
 import '../styles/EventDetails.css'
 import {Box, Grid, Button} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import EventService from '../services/EventService'
 import UserService from '../services/UserService'
@@ -55,6 +56,7 @@ const EventDetails = (props) => {
         event.preventDefault()
         console.log(JSON.stringify(currentUser.id))
         EventService.addOthers(props.match.params.id, JSON.stringify(currentUser.id))
+        window.location.reload(true)
     }
 
     return (
@@ -78,9 +80,18 @@ const EventDetails = (props) => {
                     <p>{game.title}</p>
                     <p>{event.startedAt}</p>
                     <i>{event.description}</i>
-                    <Button variant="contained" type="submit" onClick={handleSubmit}>
-                        <AddIcon /> Participer
-                    </Button>
+                    {
+                        event.organizer_id !== currentUser.id
+                        ?
+                        <Button variant="contained" type="submit" onClick={handleSubmit}>
+                            <AddIcon /> Participer
+                        </Button>
+                        :
+                        <Button variant="contained" type="submit" onClick={handleSubmit}>
+                            <VisibilityIcon /> Voir la liste des joueurs
+                        </Button>
+                    }
+
                 </Grid>
             </Grid>
         </Box>

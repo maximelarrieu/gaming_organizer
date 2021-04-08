@@ -2,6 +2,7 @@ const db = require("../models")
 const User = db.User
 const Game = db.Game
 const Event = db.Event
+const usersEvents = db.usersEvents
 
 exports.findOne = (req, res) => {
     const username = req.query.username;
@@ -47,9 +48,18 @@ exports.profile = (req, res) => {
             },
             {
                 model: Event,
-                include: [
-                    {model: Game}
-                ]
+            },
+            {
+                model: usersEvents,
+                include: {
+                    model: Event,
+                    include: {
+                        model: User
+                    },
+                    include: {
+                        model: Game
+                    }
+                }
             }
         ]
     })

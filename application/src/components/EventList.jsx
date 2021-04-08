@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 
 import {Link} from 'react-router-dom'
+import moment from 'moment';
 
 import "../styles/All.css"
 import "../styles/EventList.css"
@@ -35,6 +36,39 @@ const EventList = (props) => {
         }
     }
 
+    const remainingTime = (startedAt) => {
+        let now = new Date
+        let time = {}
+
+        let tmp = moment(startedAt).toDate() - now
+        tmp = Math.floor(tmp/1000)
+        time.seconds = tmp % 60
+
+        tmp = Math.floor((tmp - time.seconds)/60)
+        time.minutes = tmp % 60
+
+        tmp = Math.floor((tmp - time.minutes)/60)
+        time.hours = tmp % 24
+
+        tmp = Math.floor((tmp - time.hours)/24)
+        time.days = tmp
+
+        let remaining = `Début dans `
+        if (time.days > 0) {
+            remaining += `${time.days}j `
+        }
+        if (time.hours > 0) {
+            remaining += `${time.hours}h `
+        }
+        if (time.minutes > 0) {
+            remaining += `${time.minutes}m `
+        }
+        if (time.seconds >= 0) {
+            remaining += `${time.seconds}s`
+        }
+        return remaining
+    }
+
     const getGridListCols = () => {
         if (isWidthUp('xl', props.width)) {
             return 4;
@@ -61,13 +95,13 @@ const EventList = (props) => {
                     {
                         return(
                         <GridListTile key={event.id} cols={event.cols || 1}>
-                            <Link to={`events/${event.id}`}>
+                            <Link to={`/events/${event.id}`}>
                             <img src={ event.Game.image } alt={event.Game.title} style={{ color: (isStarted(event.startedAt) ? "#50b15f" : "black")}} className="card" />
-                            {isStarted(event.startedAt) ? <Typography variant="h2" className="started">STARTED</Typography> : ""}
+                            {isStarted(event.startedAt) ? <Typography variant="h2" className="started">STARTED</Typography> : null}
                                 <GridListTileBar
                                     title={event.title}
                                     subtitle={event.description}
-                                    subtitle={<Typography variant="subtitle1">Début: <Moment format="DD-MM-YYYY hh:mm">{event.startedAt}</Moment></Typography>}
+                                    subtitle={<Typography variant="subtitle1">Début: {remainingTime(event.startedAt)}</Typography>}
                                     className="padding"
                                     actionIcon={
                                         <div className="align">

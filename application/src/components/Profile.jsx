@@ -1,26 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import {Link} from 'react-router-dom'
 
 import {Box, Button, Typography, GridList, GridListTile, GridListTileBar} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
 import UserService from '../services/UserService'
 
 const Profile = (props) => {
     const {user: currentUser} = useSelector((state) => state.auth)
     const [user, setUser] = useState("")
+    // const [myEvents, setMyEvents] = useState("")
     const [events, setEvents] = useState("")
 
     useEffect(() => {
-        UserService.findOne(props.match.params.id)
+        UserService.profile(props.match.params.id)
         .then(response => {
             setUser(response.data)
-            setEvents(response.data.Events)
+            if (response.data.usersEvents.length > 0) {
+                setEvents(response.data.usersEvents)
+            }
         })
         .catch(err => {
             console.log(err)
         })
     }, [])
+
+    const isStarted = (startedAt) => {
+        const now = new Date()
+        if (Date.parse(now) >= Date.parse(startedAt)) {
+          return true
+        } else {
+          return false
+        }
+    }
+
+    const getGridListCols = () => {
+        if (isWidthUp('xl', props.width)) {
+        return '500px';
+        }
+
+        if (isWidthUp('lg', props.width)) {
+        return '400px';
+        }
+
+        if (isWidthUp('md', props.width)) {
+        return '300px';
+        }
+
+        return '250px';
+    }
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -28,7 +58,7 @@ const Profile = (props) => {
           flexWrap: 'wrap',
           justifyContent: 'space-around',
           overflow: 'hidden',
-          backgroundColor: 'black',
+          backgroundColor: '#282c34',
         },
         gridList: {
           flexWrap: 'nowrap',
@@ -40,13 +70,12 @@ const Profile = (props) => {
         },
         titleBar: {
           background:
-            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+            'rgba(0,0,0,0.7)',
         },
       }));
 
       const classes = useStyles();
 
-    console.log(events)
 
     return(
         <Box className="margin">
@@ -62,29 +91,39 @@ const Profile = (props) => {
                 :
                 null
             }
-            <Typography variant="h4">ÉVÈNEMENTS</Typography>
+            <Typography variant="h4">MES ÉVÈNEMENTS</Typography>
             <div className={classes.root}>
                 <GridList className={classes.gridList} cols={2.5}>
                 {
-                    events.length > 0
+                    events
                     ?
                     events.map((event) =>
+                        // console.log(event.Event.organizer_id === user.id)
+                        event.Event.organizer_id === user.id
+                        ?
                         // console.log(event)
-                    <GridListTile key={event.id} style={{width: '500px'}}>
-                        <img src={event.Game.image} alt={event.Game.title} />
-                        <GridListTileBar
-                        title={event.title}
-                        classes={{
-                            root: classes.titleBar,
-                            title: classes.title,
-                        }}
-                        // actionIcon={
-                        //     <IconButton aria-label={`star ${tile.title}`}>
-                        //     <StarBorderIcon className={classes.title} />
-                        //     </IconButton>
-                        // }
-                        />
-                    </GridListTile>
+                        <Link to={`/events/${event.Event.id}`}>
+                        <GridListTile key={event.Event.id} style={{width: getGridListCols()}}>
+                            <img src={event.Event.Game.image} style={{color: (isStarted(event.Event.startedAt) ? "#50b15f" : "black")}} className="card" alt={event.Event.Game.title} />
+                            {isStarted(event.Event.startedAt) ? <Typography variant="h3" className="started">STARTED</Typography> : ""}
+                            <GridListTileBar
+                            title={event.Event.title}
+                            classes={{
+                                root: classes.titleBar,
+                                title: classes.title,
+                            }}
+                            // actionIcon={
+                            //     <IconButton aria-label={`star ${tile.title}`}>
+                            //     <StarBorderIcon className={classes.title} />
+                            //     </IconButton>
+                            // }
+                            />
+                        </GridListTile>
+                        </Link>
+                        :
+                        null
+                        // <Typography variant="h5">Aucun évènement organisé</Typography>
+                        
                     )
                     :
                     <Typography variant="h6">
@@ -92,11 +131,47 @@ const Profile = (props) => {
                     </Typography>
                 }
                 </GridList>
-
             </div>
-
+            <Typography variant="h4">JE PARTICIPE</Typography>
+            <div className={classes.root}>
+                <GridList className={classes.gridList} cols={2.5}>
+                {
+                    events
+                    ?
+                    events.map((event) =>
+                        // console.log(event.Event.organizer_id === user.id)
+                        event.UserId === user.id
+                        ?
+                        // console.log(event)
+                        <GridListTile key={event.Event.id} style={{width: getGridListCols()}}>
+                            <img src={event.Event.Game.image} style={{width: '100%'}} alt={event.Event.Game.title} />
+                            <GridListTileBar
+                            title={event.Event.title}
+                            classes={{
+                                root: classes.titleBar,
+                                title: classes.title,
+                            }}
+                            // actionIcon={
+                            //     <IconButton aria-label={`star ${tile.title}`}>
+                            //     <StarBorderIcon className={classes.title} />
+                            //     </IconButton>
+                            // }
+                            />
+                        </GridListTile>
+                        :
+                        null
+                        // <Typography variant="h5">Aucun évènement organisé</Typography>
+                        
+                    )
+                    :
+                    <Typography variant="h6">
+                        Aucun évènements
+                    </Typography>
+                }
+                </GridList>
+            </div>
         </Box>
     )
 }
 
-export default Profile
+export default withWidth()(Profile)

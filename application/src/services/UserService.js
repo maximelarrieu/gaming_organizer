@@ -1,7 +1,7 @@
 import http from '../http-common'
 
 class UserService {
-    findOne(id) {
+    profile(id) {
         return http.get(`profile/${id}`)
     }
 }

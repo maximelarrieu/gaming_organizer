@@ -52,7 +52,13 @@ exports.findAll = (req, res) => {
         include: [
             {
                 model: Game
-            }
+            },
+            {
+                model: UsersEvents,
+                include: {
+                    model: User
+                }
+            },
         ],
         order: [
             ['startedAt', 'DESC']

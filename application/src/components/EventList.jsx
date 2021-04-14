@@ -14,7 +14,8 @@ import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 
 const EventList = (props) => {
-    const [events, setEvents] = useState("")
+    const [events, setEvents] = useState([])
+    const [participants, setParticipants] = useState([])
     const {user: currentUser} = useSelector((state) => state.auth)
 
     useEffect(() => {
@@ -25,6 +26,12 @@ const EventList = (props) => {
             .catch(error => {
                 console.log(error)
             })
+    }, [])
+
+    useEffect(() => {
+        events.map((event) => {
+            setParticipants(event.usersEvents)
+        })
     }, [])
 
     const isStarted = (startedAt) => {
@@ -101,13 +108,13 @@ const EventList = (props) => {
                                 <GridListTileBar
                                     title={event.title}
                                     subtitle={event.description}
-                                    subtitle={<Typography variant="subtitle1">Début: {remainingTime(event.startedAt)}</Typography>}
+                                    subtitle={isStarted(event.startedAt) ? <Typography variant="subtitle1">Évènement en cours..</Typography> : <Typography variant="subtitle1">Début: {remainingTime(event.startedAt)}</Typography>}
                                     className="padding"
                                     actionIcon={
                                         <div className="align">
                                             <PersonIcon className="icon"/>
                                             <Typography variant="subtitle1">
-                                                0 / {event.players}
+                                                {event.usersEvents.length} / {event.players}
                                             </Typography>
                                         </div>
                                     }

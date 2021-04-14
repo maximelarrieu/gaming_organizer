@@ -4,8 +4,9 @@ import {Link} from "react-router-dom"
 
 import '../styles/All.css'
 import '../styles/EventDetails.css'
-import {Box, Grid, Button} from '@material-ui/core';
+import {Box, Grid, Button, Typography} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import EventService from '../services/EventService'
@@ -13,18 +14,19 @@ import UserService from '../services/UserService'
 
 const EventDetails = (props) => {
     const [event, setEvent] = useState("")
+    const [isParticipated, setIsParticipated] = useState()
+    const [numberParticipants, setNumberParticipants] = useState(0)
+    const [participants, setParticipants] = useState([])
     const [game, setGame] = useState("")
     const [user, setUser] = useState("")
-    const [participants, setParticants] = useState("")
     const {user: currentUser} = useSelector((state) => state.auth)
-
-    console.log(currentUser)
 
     useEffect(() => {
         EventService.findOne(props.match.params.id)
             .then(response => {
-                console.log(response.data)
                 setEvent(response.data)
+                setParticipants(response.data.usersEvents)
+                setNumberParticipants(response.data.usersEvents.length)
                 setGame(response.data.Game)
                 setUser(response.data.User)
             })
@@ -33,31 +35,39 @@ const EventDetails = (props) => {
             })
     }, [])
 
-    // useEffect(() => {
-    //     EventService.findUsersInEvent(props.match.params.id)
-    //         .then(response => {
-    //             console.log(response.data)
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    // }, [])
+    useEffect(() => {
+        function isParticipant() {
+            const test = participants.find(user => 
+                (user.UserId === currentUser.id && user.EventId === event.id)
+            )
+            console.log(test)
+            if (test !== undefined) {
+                setIsParticipated(true)
+            }
+            console.log(isParticipated);
+        }
+        isParticipant()
+    }, [participants])
+
+    useEffect(() => {
+        setNumberParticipants(participants.length)
+    }, [numberParticipants])
 
     const isStarted = (startedAt) => {
         const now = new Date()
-        if (Date.parse(now) >= Date.parse(startedAt)) {
-          return true
-        } else {
-          return false
-        }
+        return (Date.parse(now) >= Date.parse(startedAt))
     }
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log(JSON.stringify(currentUser.id))
         EventService.addOthers(props.match.params.id, JSON.stringify(currentUser.id))
-        window.location.reload(true)
+        setIsParticipated(true)
+        setNumberParticipants(participants.length)
     }
+
+    console.log(event)
+    console.log(participants.length)
+    console.log(numberParticipants);
 
     return (
         <Box className="margin">
@@ -80,12 +90,21 @@ const EventDetails = (props) => {
                     <p>{game.title}</p>
                     <p>{event.startedAt}</p>
                     <i>{event.description}</i>
+                    <Typography variant="h6">{numberParticipants} / {event.players}</Typography>
                     {
                         event.organizer_id !== currentUser.id
                         ?
-                        <Button variant="contained" type="submit" onClick={handleSubmit}>
-                            <AddIcon /> Participer
-                        </Button>
+                            numberParticipants === event.players
+                            ?
+                            <Typography variant="h6" style={{color: "red"}}>Nombre de participants maximum atteins</Typography>
+                            :
+                            isParticipated
+                            ?
+                            <Typography variant="h6" style={{color: '#50b15f'}}><CheckIcon /> Vous participez à cet évènement</Typography>
+                            :
+                            <Button variant="contained" type="submit" onClick={handleSubmit}>
+                                <AddIcon /> Participer
+                            </Button>
                         :
                         <Button variant="contained" type="submit" onClick={handleSubmit}>
                             <VisibilityIcon /> Voir la liste des joueurs

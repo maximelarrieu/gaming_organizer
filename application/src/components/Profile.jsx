@@ -12,7 +12,7 @@ const Profile = (props) => {
     const {user: currentUser} = useSelector((state) => state.auth)
     const [user, setUser] = useState("")
     // const [myEvents, setMyEvents] = useState("")
-    const [events, setEvents] = useState("")
+    const [events, setEvents] = useState([])
 
     useEffect(() => {
         UserService.profile(props.match.params.id)
@@ -76,6 +76,7 @@ const Profile = (props) => {
 
       const classes = useStyles();
 
+      console.log(events)
 
     return(
         <Box className="margin">
@@ -102,8 +103,8 @@ const Profile = (props) => {
                         event.Event.organizer_id === user.id
                         ?
                         // console.log(event)
-                        <Link to={`/events/${event.Event.id}`}>
-                        <GridListTile key={event.Event.id} style={{width: getGridListCols()}}>
+                        // <Link to={`/events/${event.Event.id}`}>
+                        <GridListTile key={event.id} style={{width: getGridListCols()}}>
                             <img src={event.Event.Game.image} style={{color: (isStarted(event.Event.startedAt) ? "#50b15f" : "black")}} className="card" alt={event.Event.Game.title} />
                             {isStarted(event.Event.startedAt) ? <Typography variant="h3" className="started">STARTED</Typography> : ""}
                             <GridListTileBar
@@ -119,10 +120,10 @@ const Profile = (props) => {
                             // }
                             />
                         </GridListTile>
-                        </Link>
+                        // </Link>
                         :
                         null
-                        // <Typography variant="h5">Aucun évènement organisé</Typography>
+                        // <Typography variant="h5">Tu n'organises aucun évènements !</Typography>
                         
                     )
                     :
@@ -140,10 +141,10 @@ const Profile = (props) => {
                     ?
                     events.map((event) =>
                         // console.log(event.Event.organizer_id === user.id)
-                        event.UserId === user.id
+                        event.UserId === user.id && event.Event.organizer_id !== user.id
                         ?
                         // console.log(event)
-                        <GridListTile key={event.Event.id} style={{width: getGridListCols()}}>
+                        <GridListTile key={event.id} style={{width: getGridListCols()}}>
                             <img src={event.Event.Game.image} style={{width: '100%'}} alt={event.Event.Game.title} />
                             <GridListTileBar
                             title={event.Event.title}
@@ -165,7 +166,7 @@ const Profile = (props) => {
                     )
                     :
                     <Typography variant="h6">
-                        Aucun évènements
+                        Tu ne participes à aucun évènements !
                     </Typography>
                 }
                 </GridList>

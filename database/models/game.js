@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       }),
       Game.hasMany(models.Event, {
         foreignKey: 'game_id'
-      }),
-      Game.hasMany(models.usersEvents, {
-        foreignKey: 'UserId'
       })
+      // Game.hasMany(models.usersEvents, {
+      //   foreignKey: 'UserId'
+      // })
     }
   };
   Game.init({
